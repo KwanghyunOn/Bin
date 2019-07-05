@@ -46,23 +46,25 @@ struct Node {
 	ll f(int x) {
 		return a*x + b;
 	}
+	void print() {
+		printf("%lldx + %lld, [%d, %d]\n", a, b, l, r);
+	}
 };
 
 const int MAXN = 75e4 + 50;
 Node tree[4*MAXN], lazy[4*MAXN];
-int lb[4*MAXN], n, q;
+int n, q;
 void pushDown(int id) {
 	if(lazy[id].l) {
 		tree[2*id] = tree[2*id+1] = lazy[id];
 		lazy[2*id] = lazy[2*id+1] = lazy[id];
 	} else {
-		tree[2*id].b += lb[id];
-		tree[2*id+1].b += lb[id];
-		lb[2*id] += lb[id];
-		lb[2*id+1] += lb[id];
+		tree[2*id].b += lazy[id].b;
+		tree[2*id+1].b += lazy[id].b;
+		lazy[2*id].b += lazy[id].b;
+		lazy[2*id+1].b += lazy[id].b;
 	}
 	lazy[id] = {0, 0, 0, 0};
-	lb[id] = 0;
 }
 
 void rangeUpdate(int s, int e, Node t, int l = 1, int r = n, int id = 1) {
@@ -81,7 +83,7 @@ void rangeAdd(int s, int e, ll val, int l = 1, int r = n, int id = 1) {
 	if(e < l || r < s) return;
 	if(s <= l && r <= e) {
 		tree[id].b += val;
-		lb[id] += val;
+		lazy[id].b += val;
 		return;
 	}
 	int mid = (l + r) / 2;
@@ -131,17 +133,30 @@ void dfs(int s, int e, SegmentTree &htree) {
 	Node lnode = {h[v], (lval + (-v+1)*h[v]), -1, -1};
 	rangeAdd(v+1, e, (v-s+1) * h[v]);
 
-	int cur = v+1;
-	while(cur <= e) {
-		Node cnode = findNode(cur);
-		if(cnode.f(cnode.r) < lnode.f(cnode.r)) {
-			int meetX = (lnode.a != cnode.a) ? (cnode.b - lnode.b) / (lnode.a - cnode.a) : cnode.r;
-			rangeUpdate(v+1, meetX, lnode);
-			rangeUpdate(meetX+1, cnode.r, {cnode.a, cnode.b, meetX+1, cnode.r});
-			break;
+	if(v < e) {
+		bool flag = false;
+		int cur = v+1;
+		while(cur <= e) {
+			Node cnode = findNode(cur);
+			if(cnode.f(cnode.r) < lnode.f(cnode.r)) {
+				int meetX = (lnode.a != cnode.a) ? (cnode.b - lnode.b) / (lnode.a - cnode.a) : cnode.r;
+				lnode.l = v, lnode.r = meetX;
+				rangeUpdate(v, meetX, lnode);
+				rangeUpdate(meetX+1, cnode.r, {cnode.a, cnode.b, meetX+1, cnode.r});
+				flag = true;
+				break;
+			}
+			cur = cnode.r + 1;
 		}
-		cur = cnode.r + 1;
+		if(!flag) {
+			lnode.l = v, lnode.r = e;
+			rangeUpdate(v, e, lnode);
+		}
+	} else {
+		lnode.l = lnode.r = v;
+		rangeUpdate(v, v, lnode);
 	}
+	
 
 	for(int i : ql[v]) {
 		int mi = htree.argmax(li[i], ri[i]);
@@ -159,6 +174,7 @@ void solve() {
 		if(mi < ri[i]) ql[htree.argmax(mi+1, ri[i])].push_back(i);
 	}
 	dfs(1, n, htree);
+	repp(i, n) ql[i].clear();
 }
 
 
@@ -182,8 +198,8 @@ vector<ll> minimum_costs(vector<int> H, vector<int> L, vector<int> R) {
 	// pivot is left of max
 	repp(i, n) h[i] = H[n-i];
 	repp(i, q) {
-		li[i] = (n+1)-L[i-1];
-		ri[i] = (n+1)-R[i-1];
+		ri[i] = (n+1)-L[i-1];
+		li[i] = (n+1)-R[i-1];
 	}
 	solve();
 
