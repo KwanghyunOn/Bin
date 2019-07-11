@@ -1,3 +1,5 @@
+// https://www.hackerrank.com/contests/world-codesprint-6/challenges/functional-palindromes
+
 #include <bits/stdc++.h>
 
 using namespace std;
