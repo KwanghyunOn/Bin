@@ -52,26 +52,36 @@ int dfsCentroid(int v, int p, int size) {
 }
 
 
-int ans = INF;
-void merge(int v, int p, int len, ll wsum, map<ll, int> &M, vector<pli> &tmp) {
+
+const int MAXK = 1e6 + 50;
+int minDist[MAXK], ans = INF;
+vector<int> updateList;
+vector<pli> tmp;
+
+void merge(int v, int p, int len, ll wsum) {
 	if(wsum > k) return;
-	if(M.find(k-wsum) != M.end()) ans = min(ans, M[k-wsum] + len);
+	ans = min(ans, minDist[k-wsum] + len);
 	tmp.emplace_back(wsum, len);
 	for(auto c : adj[v]) if(!vis[c.to] && c.to != p)
-		merge(c.to, v, len+1, wsum + c.weight, M, tmp);
+		merge(c.to, v, len+1, wsum + c.weight);
 }
 
 void solve(int ctr) {
-	map<ll, int> M;
-	M.insert({0, 0});		// centroid itself
+	minDist[0] = 0;
+	updateList.push_back(0);
 	for(auto c : adj[ctr]) if(!vis[c.to]) {
-		vector<pli> tmp;
-		merge(c.to, ctr, 1, c.weight, M, tmp);
+		merge(c.to, ctr, 1, c.weight);
 		for(auto e : tmp) {
-			if(M.find(e.first) != M.end()) M[e.first] = min(M[e.first], e.second);
-			else M.insert(e);
+			if(minDist[e.first] != INF) minDist[e.first] = min(minDist[e.first], e.second);
+			else {
+				minDist[e.first] = e.second;
+				updateList.push_back(e.first);
+			}
 		}
+		tmp.clear();
 	}
+	for(int i : updateList) minDist[i] = INF;
+	updateList.clear();
 }
 
 void decompose(int v) {
@@ -87,6 +97,7 @@ void decompose(int v) {
 int main() {
 	// freopen("input.txt", "r", stdin);
 	readInput();
+	for(int i = 0; i <= k; i++) minDist[i] = INF;
 	decompose(0);
 	printf("%d\n", (ans == INF) ? -1 : ans);
 }
