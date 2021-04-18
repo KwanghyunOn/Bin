@@ -13,6 +13,7 @@ tfms = transforms.Compose([transforms.Resize(224),
 train_dataset = load_dataset('train', transform=tfms)
 train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=cfg.batch_size, shuffle=True, num_workers=cfg.num_workers)
 optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr)
+criterion = torch.nn.CrossEntropyLoss()
 
 device = torch.device("cuda:0")
 model.train()
