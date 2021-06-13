@@ -1,0 +1,185 @@
+Main model
+ child 0 is:
+Sequential(
+  (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+  (1): ReLU(inplace=True)
+  (2): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  (4): ReLU(inplace=True)
+  (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (7): ReLU(inplace=True)
+  (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (9): ReLU(inplace=True)
+  (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (11): ReLU(inplace=True)
+  (12): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+)
+ child 1 is:
+AdaptiveAvgPool2d(output_size=(6, 6))
+ child 2 is:
+Sequential(
+  (0): Dropout(p=0.5, inplace=False)
+  (1): Linear(in_features=9216, out_features=4096, bias=True)
+  (2): ReLU(inplace=True)
+  (3): Dropout(p=0.5, inplace=False)
+  (4): Linear(in_features=4096, out_features=4096, bias=True)
+  (5): ReLU(inplace=True)
+  (6): Linear(in_features=4096, out_features=1000, bias=True)
+)
+Mobile model
+ child 0 is:
+Sequential(
+  (0): Conv2d(3, 64, kernel_size=(11, 11), stride=(4, 4), padding=(2, 2))
+  (1): ReLU(inplace=True)
+  (2): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (3): Conv2d(64, 192, kernel_size=(5, 5), stride=(1, 1), padding=(2, 2))
+  (4): ReLU(inplace=True)
+  (5): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (6): Conv2d(192, 384, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (7): ReLU(inplace=True)
+  (8): Conv2d(384, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (9): ReLU(inplace=True)
+  (10): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (11): ReLU(inplace=True)
+  (12): MaxPool2d(kernel_size=3, stride=2, padding=0, dilation=1, ceil_mode=False)
+)
+n     time  
+1     0.1267
+2     0.001802
+3     0.002086
+4     0.002101
+5     0.00274
+6     0.00222
+7     0.002004
+8     0.001866
+9     0.002223
+10    0.002282
+20    0.003729
+30    0.005465
+40    0.005781
+50    0.007564
+60    0.008278
+70    0.009528
+80    0.01011
+90    0.01144
+100   0.01317
+110   0.01501
+120   0.01465
+130   0.01631
+140   0.01679
+150   0.01793
+160   0.01853
+170   0.02061
+180   0.02124
+190   0.02207
+200   0.0223
+210   0.02328
+220   0.02317
+230   0.02466
+240   0.02515
+250   0.02565
+260   0.02772
+270   0.02808
+280   0.02934
+290   0.03128
+300   0.03138
+310   0.03273
+320   0.0334
+330   0.09593
+340   0.03566
+350   0.0365
+360   0.03769
+370   0.03887
+380   0.03948
+390   0.04177
+400   0.04227
+410   0.04359
+420   0.04491
+430   0.04483
+440   0.04616
+450   0.04785
+460   0.04758
+470   0.04905
+480   0.04873
+490   0.05083
+500   0.08113
+510   0.05214
+520   0.05413
+530   0.05452
+540   0.05518
+550   0.05725
+560   0.05721
+570   0.05894
+580   0.06005
+590   0.06056
+600   0.06165
+610   0.1002
+620   0.06355
+630   0.06446
+640   0.06617
+650   0.06659
+660   0.06797
+670   0.06867
+680   0.06943
+690   0.1008
+700   0.07224
+710   0.07344
+720   0.07283
+730   0.07462
+740   0.07607
+750   0.07637
+760   0.1194
+770   0.07954
+780   0.07986
+790   0.07987
+800   0.08093
+810   0.1252
+820   0.08537
+830   0.08393
+840   0.08724
+850   0.1275
+860   0.08839
+870   0.08962
+880   0.09032
+890   0.1321
+900   0.0928
+910   0.09304
+920   0.09358
+930   0.1286
+940   0.09586
+950   0.09819
+960   0.09815
+970    0.125
+980   0.1557
+990   0.1018
+1000  0.1353
+1010  0.1039
+1020  0.1039
+1030  0.1381
+1040  0.1056
+1050  0.1259
+1060  0.1279
+1070  0.1089
+1080  0.1295
+1090  0.1537
+1100  0.1554
+1110  0.1348
+1120  0.1629
+1130  0.1353
+1140  0.1376
+1150  0.1179
+1160  0.1666
+1170  0.1637
+1180  0.1546
+1190  0.1887
+1200  0.1562
+1210  0.1941
+1220  0.1676
+1230  0.1952
+1240   0.156
+1250  0.1938
+1260  0.1948
+1270   0.201
+1280  0.1546
+1290  0.2172
